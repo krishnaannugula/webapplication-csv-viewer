@@ -63,16 +63,6 @@ stages:
     strategy:
       runOnce:
         deploy:
-          # steps:
-          # - task: AzureWebApp@1
-          #   displayName: 'Azure Web App Deploy: $(WEBAPPNAME)'
-          #   inputs:
-          #     azureSubscription: 'azconnection'
-          #     appType: 'webAppLinux'
-          #     appName: '$(WEBAPPNAME)'
-          #     package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
-          #     runtimeStack: 'NODE|14-lts'
-          #     startUpCommand: 'npm run start'
           steps:
           - task: AzureRmWebAppDeployment@4
             displayName: 'Azure App Service Deploy: $(WEBAPPNAME)'
@@ -80,37 +70,35 @@ stages:
               ConnectionType: 'AzureRM'
               azureSubscription: 'azconnection'
               appType: 'webAppLinux'
-              WebAppName: 'webcsvviewerneustgwa'
+              WebAppName: $(WEBAPPNAME)
               packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
               RuntimeStack: 'NODE|14-lts'
               StartupCommand: 'npm run start'
 
 #     ###### Teams Success Notification######
 
-# - stage: BuildNotificationsucceeded
-#   displayName: Teams Success Notification
-#   #dependsOn: Deploy
-#   condition: succeeded()
-#   jobs:
-#     - job: Notification
-#       steps:
-#       - checkout: none
-#       - task: PowerShell@2
-#         inputs:
-#           targetType: 'inline'
-#           script: |
-#             # Write your PowerShell commands here.
+- stage: BuildNotificationsucceeded
+  displayName: Teams Success Notification
+  #dependsOn: Deploy
+  condition: succeeded()
+  jobs:
+    - job: Notification
+      steps:
+      - checkout: none
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: |
+            # Write your PowerShell commands here.
             
-#             $webhookURL =
-#             "https://kacorp173.webhook.office.com/webhookb2/65ec2ae1-1b20-4824-9811-feafb8ab253a@82bb0453-fb71-4ed9-a94c-9630e87971bc/IncomingWebhook/7386130c16984f2c8cd7dd8bb5ec6e0c/e1d27e51-b97e-471a-b7e9-ef6bd1c604c6"
+           
+            $messageCardBody=@"
+            { "@type": "MessageCard", "@context": "https://schema.org/extensions", "summary": "1 new build message", "themeColor": "0078D7", "sections": [ { "activityImage": "https://cdn2.iconfinder.com/data/icons/weby-flat-vol-1/512/1_Approved-check-checkbox-confirm-green-success-tick-512.png", "activityTitle": "Notification", "activitySubtitle": "Build and Release", "facts": [ { "name": "EnvName:", "value": "${env:ENVIRONMENTNAME}" }, { "name": "ApplicationName:", "value": "${env:WEBAPPNAME}" },{ "name": "BuildNumber:", "value": "$(Build.BuildNumber)" },{ "name": "BuildStatus:", "value": "$(Agent.JobStatus)" } ], "text": "Deployment to ${env:ENVIRONMENTNAME}", "potentialAction": [  ] } ] }
+            "@
+            echo ${messageCardBody}
+            echo ${env:WEBAPPNAME}
 
-#             $messageCardBody=@"
-#             { "@type": "MessageCard", "@context": "https://schema.org/extensions", "summary": "1 new build message", "themeColor": "0078D7", "sections": [ { "activityImage": "https://cdn2.iconfinder.com/data/icons/weby-flat-vol-1/512/1_Approved-check-checkbox-confirm-green-success-tick-512.png", "activityTitle": "Notification", "activitySubtitle": "Build and Release", "facts": [ { "name": "EnvName:", "value": "${env:ENVIRONMENTNAME}" }, { "name": "ApplicationName:", "value": "${env:WEBAPPNAME}" },{ "name": "BuildNumber:", "value": "$(Build.BuildNumber)" },{ "name": "BuildStatus:", "value": "$(Agent.JobStatus)" } ], "text": "Deployment to $(environmentName)", "potentialAction": [  ] } ] }
-#             "@
-#             echo ${messageCardBody}
-#             echo ${env:WEBAPPNAME}
-
-#             Invoke-RestMethod -uri $webhookURL -Method Post -body $messageCardBody -ContentType ‘application/json’
+            Invoke-RestMethod -uri ${env:WEBHOOKURL} -Method Post -body $messageCardBody -ContentType ‘application/json’
 
 #     ###### Teams Failed Notification######
 
@@ -137,7 +125,7 @@ stages:
 #             echo ${messageCardBody}
 #             echo ${env:WEBAPPNAME}
 
-#             Invoke-RestMethod -uri $webhookURL -Method Post -body $messageCardBody -ContentType ‘application/json’
+#             Invoke-RestMethod -uri ${env:WEBHOOKURL} -Method Post -body $messageCardBody -ContentType ‘application/json’
 
 
 

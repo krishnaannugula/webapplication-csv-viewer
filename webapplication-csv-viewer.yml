@@ -75,55 +75,55 @@ stages:
               RuntimeStack: 'NODE|14-lts'
               StartupCommand: 'npm run start'
 
-#     ###### Teams Success Notification######
+# #     ###### Teams Success Notification######
 
-- stage: BuildNotificationsucceeded
-  displayName: Teams Success Notification
-  #dependsOn: Deploy
-  condition: succeeded()
-  jobs:
-    - job: Notification
-      steps:
-      - checkout: none
-      - task: PowerShell@2
-        inputs:
-          targetType: 'inline'
-          script: |
-            # Write your PowerShell commands here.
+# - stage: BuildNotificationsucceeded
+#   displayName: Teams Success Notification
+#   dependsOn: Deploy
+#   condition: succeeded()
+#   jobs:
+#     - job: Notification
+#       steps:
+#       - checkout: none
+#       - task: PowerShell@2
+#         inputs:
+#           targetType: 'inline'
+#           script: |
+#             # Write your PowerShell commands here.
             
            
-            $messageCardBody=@"
-            { "@type": "MessageCard", "@context": "https://schema.org/extensions", "summary": "1 new build message", "themeColor": "0078D7", "sections": [ { "activityImage": "https://cdn2.iconfinder.com/data/icons/weby-flat-vol-1/512/1_Approved-check-checkbox-confirm-green-success-tick-512.png", "activityTitle": "Notification", "activitySubtitle": "Build and Release", "facts": [ { "name": "EnvName:", "value": "${env:ENVIRONMENTNAME}" }, { "name": "ApplicationName:", "value": "${env:WEBAPPNAME}" },{ "name": "BuildNumber:", "value": "$(Build.BuildNumber)" },{ "name": "BuildStatus:", "value": "$(Agent.JobStatus)" } ], "text": "Deployment to ${env:ENVIRONMENTNAME}", "potentialAction": [  ] } ] }
-            "@
-            echo ${messageCardBody}
-            echo ${env:WEBAPPNAME}
+#             $messageCardBody=@"
+#             { "@type": "MessageCard", "@context": "https://schema.org/extensions", "summary": "1 new build message", "themeColor": "0078D7", "sections": [ { "activityImage": "https://cdn2.iconfinder.com/data/icons/weby-flat-vol-1/512/1_Approved-check-checkbox-confirm-green-success-tick-512.png", "activityTitle": "Notification", "activitySubtitle": "Build and Release", "facts": [ { "name": "EnvName:", "value": "${env:ENVIRONMENTNAME}" }, { "name": "ApplicationName:", "value": "${env:WEBAPPNAME}" },{ "name": "BuildNumber:", "value": "$(Build.BuildNumber)" },{ "name": "BuildStatus:", "value": "$(Agent.JobStatus)" } ], "text": "Deployment to ${env:ENVIRONMENTNAME}", "potentialAction": [  ] } ] }
+#             "@
+#             echo ${messageCardBody}
+#             echo ${env:WEBAPPNAME}
 
-            Invoke-RestMethod -uri ${env:WEBHOOKURL} -Method Post -body $messageCardBody -ContentType ‘application/json’
+#             Invoke-RestMethod -uri ${env:WEBHOOKURL} -Method Post -body $messageCardBody -ContentType ‘application/json’
 
-#     ###### Teams Failed Notification######
+# #     ###### Teams Failed Notification######
 
-- stage: BuildNotificationFailed
-  displayName: Teams Failed Notification
-  #dependsOn: Deploy
-  condition: Failed()
-  jobs:
-    - job: Notification
-      steps:
-      - checkout: none
-      - task: PowerShell@2
-        inputs:
-          targetType: 'inline'
-          script: |
-            # Write your PowerShell commands here.
+# - stage: BuildNotificationFailed
+#   displayName: Teams Failed Notification
+#   dependsOn: Deploy
+#   condition: Failed()
+#   jobs:
+#     - job: Notification
+#       steps:
+#       - checkout: none
+#       - task: PowerShell@2
+#         inputs:
+#           targetType: 'inline'
+#           script: |
+#             # Write your PowerShell commands here.
             
            
-            $messageCardBody=@"
-            { "@type": "MessageCard", "@context": "https://schema.org/extensions", "summary": "1 new build message", "themeColor": "0078D7", "sections": [ { "activityImage": "https://icon-library.com/images/failed-icon/failed-icon-7.jpg", "activityTitle": "Notification", "activitySubtitle": "Build and Release", "facts": [ { "name": "EnvName:", "value": "${env:ENVIRONMENTNAME}" }, { "name": "ApplicationName:", "value": "${env:WEBAPPNAME}" },{ "name": "BuildNumber:", "value": "$(Build.BuildNumber)" },{ "name": "BuildStatus:", "value": "Failed" } ], "text": "Deployment to ${env:ENVIRONMENTNAME}", "potentialAction": [  ] } ] }
-            "@
-            echo ${messageCardBody}
-            echo ${env:WEBAPPNAME}
+#             $messageCardBody=@"
+#             { "@type": "MessageCard", "@context": "https://schema.org/extensions", "summary": "1 new build message", "themeColor": "0078D7", "sections": [ { "activityImage": "https://icon-library.com/images/failed-icon/failed-icon-7.jpg", "activityTitle": "Notification", "activitySubtitle": "Build and Release", "facts": [ { "name": "EnvName:", "value": "${env:ENVIRONMENTNAME}" }, { "name": "ApplicationName:", "value": "${env:WEBAPPNAME}" },{ "name": "BuildNumber:", "value": "$(Build.BuildNumber)" },{ "name": "BuildStatus:", "value": "Failed" } ], "text": "Deployment to ${env:ENVIRONMENTNAME}", "potentialAction": [  ] } ] }
+#             "@
+#             echo ${messageCardBody}
+#             echo ${env:WEBAPPNAME}
 
-            Invoke-RestMethod -uri ${env:WEBHOOKURL} -Method Post -body $messageCardBody -ContentType ‘application/json’
+#             Invoke-RestMethod -uri ${env:WEBHOOKURL} -Method Post -body $messageCardBody -ContentType ‘application/json’
 
 
 

@@ -82,6 +82,8 @@ stages:
               appType: 'webAppLinux'
               WebAppName: 'webcsvviewerneustgwa'
               packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+              RuntimeStack: 'NODE|14-lts'
+              StartupCommand: 'npm run start'
 
 #     ###### Teams Success Notification######
 

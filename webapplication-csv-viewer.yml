@@ -71,7 +71,7 @@ stages:
               azureSubscription: 'azconnection'
               appType: 'webAppLinux'
               WebAppName: $(WEBAPPNAME)
-              packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+              packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip1'
               RuntimeStack: 'NODE|14-lts'
               StartupCommand: 'npm run start'
 
@@ -102,30 +102,28 @@ stages:
 
 #     ###### Teams Failed Notification######
 
-# - stage: BuildNotificationFailed
-#   displayName: Teams Failed Notification
-#   #dependsOn: Deploy
-#   condition: Failed()
-#   jobs:
-#     - job: Notification
-#       steps:
-#       - checkout: none
-#       - task: PowerShell@2
-#         inputs:
-#           targetType: 'inline'
-#           script: |
-#             # Write your PowerShell commands here.
+- stage: BuildNotificationFailed
+  displayName: Teams Failed Notification
+  #dependsOn: Deploy
+  condition: Failed()
+  jobs:
+    - job: Notification
+      steps:
+      - checkout: none
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: |
+            # Write your PowerShell commands here.
             
-#             $webhookURL =
-#             "https://kacorp173.webhook.office.com/webhookb2/65ec2ae1-1b20-4824-9811-feafb8ab253a@82bb0453-fb71-4ed9-a94c-9630e87971bc/IncomingWebhook/7386130c16984f2c8cd7dd8bb5ec6e0c/e1d27e51-b97e-471a-b7e9-ef6bd1c604c6"
+           
+            $messageCardBody=@"
+            { "@type": "MessageCard", "@context": "https://schema.org/extensions", "summary": "1 new build message", "themeColor": "0078D7", "sections": [ { "activityImage": "https://icon-library.com/images/failed-icon/failed-icon-7.jpg", "activityTitle": "Notification", "activitySubtitle": "Build and Release", "facts": [ { "name": "EnvName:", "value": "${env:ENVIRONMENTNAME}" }, { "name": "ApplicationName:", "value": "${env:WEBAPPNAME}" },{ "name": "BuildNumber:", "value": "$(Build.BuildNumber)" },{ "name": "BuildStatus:", "value": "Failed" } ], "text": "Deployment to ${env:ENVIRONMENTNAME}", "potentialAction": [  ] } ] }
+            "@
+            echo ${messageCardBody}
+            echo ${env:WEBAPPNAME}
 
-#             $messageCardBody=@"
-#             { "@type": "MessageCard", "@context": "https://schema.org/extensions", "summary": "1 new build message", "themeColor": "0078D7", "sections": [ { "activityImage": "https://icon-library.com/images/failed-icon/failed-icon-7.jpg", "activityTitle": "Notification", "activitySubtitle": "Build and Release", "facts": [ { "name": "EnvName:", "value": "${env:ENVIRONMENTNAME}" }, { "name": "ApplicationName:", "value": "${env:WEBAPPNAME}" },{ "name": "BuildNumber:", "value": "$(Build.BuildNumber)" },{ "name": "BuildStatus:", "value": "Failed" } ], "text": "Deployment to $(environmentName)", "potentialAction": [  ] } ] }
-#             "@
-#             echo ${messageCardBody}
-#             echo ${env:WEBAPPNAME}
-
-#             Invoke-RestMethod -uri ${env:WEBHOOKURL} -Method Post -body $messageCardBody -ContentType ‘application/json’
+            Invoke-RestMethod -uri ${env:WEBHOOKURL} -Method Post -body $messageCardBody -ContentType ‘application/json’
 
 
 

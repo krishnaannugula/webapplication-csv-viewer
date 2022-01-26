@@ -81,7 +81,7 @@ stages:
               azureSubscription: 'azconnection'
               appType: 'webAppLinux'
               WebAppName: 'webcsvviewerneustgwa'
-              packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+              packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 
 #     ###### Teams Success Notification######
 

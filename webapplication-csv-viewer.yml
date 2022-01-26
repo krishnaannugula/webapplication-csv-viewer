@@ -63,17 +63,25 @@ stages:
     strategy:
       runOnce:
         deploy:
+          # steps:
+          # - task: AzureWebApp@1
+          #   displayName: 'Azure Web App Deploy: $(WEBAPPNAME)'
+          #   inputs:
+          #     azureSubscription: 'azconnection'
+          #     appType: 'webAppLinux'
+          #     appName: '$(WEBAPPNAME)'
+          #     package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+          #     runtimeStack: 'NODE|14-lts'
+          #     startUpCommand: 'npm run start'
           steps:
-          - task: AzureWebApp@1
-            displayName: 'Azure Web App Deploy: $(WEBAPPNAME)'
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'Azure App Service Deploy: $(WEBAPPNAME)'
             inputs:
+              ConnectionType: 'AzureRM'
               azureSubscription: 'azconnection'
               appType: 'webAppLinux'
-              appName: '$(WEBAPPNAME)'
-              package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
-              runtimeStack: 'NODE|14-lts'
-              startUpCommand: 'npm run start'
-              
+              WebAppName: 'webcsvviewerneustgwa'
+              packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
 
 #     ###### Teams Success Notification######
 
@@ -128,3 +136,8 @@ stages:
 #             echo ${env:WEBAPPNAME}
 
 #             Invoke-RestMethod -uri $webhookURL -Method Post -body $messageCardBody -ContentType ‘application/json’
+
+
+
+
+

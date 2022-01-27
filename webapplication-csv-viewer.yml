@@ -64,16 +64,32 @@ stages:
       runOnce:
         deploy:
           steps:
+          # - task: AzureRmWebAppDeployment@4
+          #   displayName: 'Azure App Service Deploy: $(WEBAPPNAME)'
+          #   inputs:
+          #     ConnectionType: 'AzureRM'
+          #     azureSubscription: 'azconnection'
+          #     appType: 'webAppLinux'
+          #     WebAppName: $(WEBAPPNAME)
+          #     packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+          #     RuntimeStack: 'NODE|14-lts'
+          #     StartupCommand: 'npm run start'
+
+
           - task: AzureRmWebAppDeployment@4
-            displayName: 'Azure App Service Deploy: $(WEBAPPNAME)'
+            displayName: 'Azure App Service Deploy: webcsvviewerneuprodwa'
             inputs:
               ConnectionType: 'AzureRM'
               azureSubscription: 'azconnection'
               appType: 'webAppLinux'
-              WebAppName: $(WEBAPPNAME)
+              WebAppName: 'webcsvviewerneuprodwa'
               packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
               RuntimeStack: 'NODE|14-lts'
               StartupCommand: 'npm run start'
+
+
+
+
 
 # #     ###### Teams Success Notification######
 

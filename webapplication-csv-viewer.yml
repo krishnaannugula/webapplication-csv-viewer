@@ -84,7 +84,6 @@ stages:
               appType: 'webAppLinux'
               WebAppName: 'webcsvviewerneuprodwa'
               packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
-              RuntimeStack: 'NODE|14-lts'
               StartupCommand: 'npm run start'
               AppSettings: |
                 PRE_BUILD_COMMAND=#!/bin/sh

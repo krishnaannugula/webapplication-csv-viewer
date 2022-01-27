@@ -57,7 +57,7 @@ stages:
   jobs:
   - deployment: Deploy
     displayName: Deploy
-    environment: UAT
+    environment: Staging
     pool:
       vmImage: $(vmImageName)
     strategy:

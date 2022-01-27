@@ -25,16 +25,21 @@ stages:
       vmImage: $(vmImageName)
 
     steps:
+    
     - task: NodeTool@0
       inputs:
         versionSpec: '14.x'
       displayName: 'Install Node.js'
+      
 
     - script: |
+        echo $(System.DefaultWorkingDirectory)
+        ls  
         npm install
         npm run build --if-present
         npm run test --if-present
       displayName: 'npm install, build and test'
+      
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'

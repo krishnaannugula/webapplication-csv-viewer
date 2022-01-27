@@ -34,6 +34,7 @@ stages:
       
 
     - script: |
+        cd WebApplication
         echo $(System.DefaultWorkingDirectory)
         echo ls
         npm install

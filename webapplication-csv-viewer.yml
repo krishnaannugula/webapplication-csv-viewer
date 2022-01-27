@@ -55,42 +55,42 @@ stages:
 
     #####Release######
 
-- stage: Deploy
-  displayName: Deploy stage
-  #dependsOn: Build
-  condition: succeeded()
-  jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    environment: Staging
-    pool:
-      vmImage: $(vmImageName)
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          # - task: AzureRmWebAppDeployment@4
-          #   displayName: 'Azure App Service Deploy: $(WEBAPPNAME)'
-          #   inputs:
-          #     ConnectionType: 'AzureRM'
-          #     azureSubscription: 'azconnection'
-          #     appType: 'webAppLinux'
-          #     WebAppName: $(WEBAPPNAME)
-          #     packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
-          #     RuntimeStack: 'NODE|14-lts'
-          #     StartupCommand: 'npm run start'
+# - stage: Deploy
+#   displayName: Deploy stage
+#   #dependsOn: Build
+#   condition: succeeded()
+#   jobs:
+#   - deployment: Deploy
+#     displayName: Deploy
+#     environment: Staging
+#     pool:
+#       vmImage: $(vmImageName)
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
+#           # - task: AzureRmWebAppDeployment@4
+#           #   displayName: 'Azure App Service Deploy: $(WEBAPPNAME)'
+#           #   inputs:
+#           #     ConnectionType: 'AzureRM'
+#           #     azureSubscription: 'azconnection'
+#           #     appType: 'webAppLinux'
+#           #     WebAppName: $(WEBAPPNAME)
+#           #     packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+#           #     RuntimeStack: 'NODE|14-lts'
+#           #     StartupCommand: 'npm run start'
 
 
-          - task: AzureRmWebAppDeployment@3
-            displayName: 'Azure App Service Deploy: webcsvviewerneuprodwa'
-            inputs:
-              azureSubscription: 'azconnection'
-              appType: 'applinux'
-              WebAppName: 'webcsvviewerneuprodwa'
-              ImageSource: 'Builtin'
-              packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
-              RuntimeStack: 'NODE|14-lts'
-              StartupCommand: 'npm init'
+#           - task: AzureRmWebAppDeployment@3
+#             displayName: 'Azure App Service Deploy: webcsvviewerneuprodwa'
+#             inputs:
+#               azureSubscription: 'azconnection'
+#               appType: 'applinux'
+#               WebAppName: 'webcsvviewerneuprodwa'
+#               ImageSource: 'Builtin'
+#               packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+#               RuntimeStack: 'NODE|14-lts'
+#               StartupCommand: 'npm init'
 
 
 

@@ -11,7 +11,7 @@ Continuous Integration and Deployments are enabled using [Azure DevOps CI/CD pip
 
 ## Detailed desing
 
-![image info](https://github.com/krishnaannugula/webapplication-csv-viewer/blob/master/Desing_Daigram.png)
+![image info](https://github.com/krishnaannugula/webapplication-csv-viewer/blob/master/Desing_Diagram.png)
 
 
 ## Running Locally

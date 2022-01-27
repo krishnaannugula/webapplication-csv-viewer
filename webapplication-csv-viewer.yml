@@ -50,52 +50,52 @@ stages:
         archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
         replaceExistingArchive: true
 
-    # - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-    #   artifact: drop
+    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      artifact: drop
 
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-        ArtifactName: 'drop'
-        publishLocation: 'Container'
+    # - task: PublishBuildArtifacts@1
+    #   inputs:
+    #     PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    #     ArtifactName: 'drop'
+    #     publishLocation: 'Container'
     #####Release######
 
-# - stage: Deploy
-#   displayName: Deploy stage
-#   #dependsOn: Build
-#   condition: succeeded()
-#   jobs:
-#   - deployment: Deploy
-#     displayName: Deploy
-#     environment: Staging
-#     pool:
-#       vmImage: $(vmImageName)
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           # - task: AzureRmWebAppDeployment@4
-#           #   displayName: 'Azure App Service Deploy: $(WEBAPPNAME)'
-#           #   inputs:
-#           #     ConnectionType: 'AzureRM'
-#           #     azureSubscription: 'azconnection'
-#           #     appType: 'webAppLinux'
-#           #     WebAppName: $(WEBAPPNAME)
-#           #     packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
-#           #     RuntimeStack: 'NODE|14-lts'
-#           #     StartupCommand: 'npm run start'
+- stage: Deploy
+  displayName: Deploy stage
+  #dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    environment: Staging
+    pool:
+      vmImage: $(vmImageName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          # - task: AzureRmWebAppDeployment@4
+          #   displayName: 'Azure App Service Deploy: $(WEBAPPNAME)'
+          #   inputs:
+          #     ConnectionType: 'AzureRM'
+          #     azureSubscription: 'azconnection'
+          #     appType: 'webAppLinux'
+          #     WebAppName: $(WEBAPPNAME)
+          #     packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+          #     RuntimeStack: 'NODE|14-lts'
+          #     StartupCommand: 'npm run start'
 
 
-#           - task: AzureRmWebAppDeployment@4
-#             displayName: 'Azure App Service Deploy: webcsvviewerneustgwa'
-#             inputs:
-#               ConnectionType: 'AzureRM'
-#               azureSubscription: 'azconnection'
-#               appType: 'webAppLinux'
-#               WebAppName: 'webcsvviewerneustgwa'
-#               packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
-#               RuntimeStack: 'NODE|14-lts'
-#               AppSettings: '-AZURE_STORAGE_CONNECTION_STRING DefaultEndpointsProtocol=https;AccountName=webcsvviewerneustgsa;AccountKey=Jfx+GDsZcdmFdOjOtwUswM+Cme8aA0vFJ4hHiIx3GL4aMjTKvgR9tD2DYXEA0+akUllpLeokk8F+o/1Reh7f8A==;EndpointSuffix=core.windows.net -AZURE_STORAGE_CONTAINER input -CSV_BLOB_FILE us-500.csv -WEBSITE_RUN_FROM_PACKAGE 1 -SCM_DO_BUILD_DURING_DEPLOYMENT true'
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'Azure App Service Deploy: webcsvviewerneustgwa'
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'azconnection'
+              appType: 'webAppLinux'
+              WebAppName: 'webcsvviewerneustgwa'
+              packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+              RuntimeStack: 'NODE|14-lts'
+              AppSettings: '-AZURE_STORAGE_CONNECTION_STRING DefaultEndpointsProtocol=https;AccountName=webcsvviewerneustgsa;AccountKey=Jfx+GDsZcdmFdOjOtwUswM+Cme8aA0vFJ4hHiIx3GL4aMjTKvgR9tD2DYXEA0+akUllpLeokk8F+o/1Reh7f8A==;EndpointSuffix=core.windows.net -AZURE_STORAGE_CONTAINER input -CSV_BLOB_FILE us-500.csv -WEBSITE_RUN_FROM_PACKAGE 1 -SCM_DO_BUILD_DURING_DEPLOYMENT true'
 
 
 

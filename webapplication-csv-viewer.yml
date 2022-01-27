@@ -175,7 +175,7 @@ stages:
 
 #     ###### Teams Success Notification######
 
-- stage: BuildNotificationsucceeded
+- stage: BuildNotificationsucceededProd
   displayName: Teams Success Notification
   dependsOn: DeployToProduction
   condition: succeeded()
@@ -200,7 +200,7 @@ stages:
 
 #     ###### Teams Failed Notification######
 
-- stage: BuildNotificationFailed
+- stage: BuildNotificationFailedProd
   displayName: Teams Failed Notification
   dependsOn: DeployToProduction
   condition: Failed()

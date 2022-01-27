@@ -76,18 +76,12 @@ stages:
           #     StartupCommand: 'npm run start'
 
 
-          - task: AzureRmWebAppDeployment@4
+          - task: AzureRmWebAppDeployment@3
             displayName: 'Azure App Service Deploy: webcsvviewerneuprodwa'
             inputs:
-              ConnectionType: 'AzureRM'
               azureSubscription: 'azconnection'
-              appType: 'webAppLinux'
+              appType: 'applinux'
               WebAppName: 'webcsvviewerneuprodwa'
-              packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
-              StartupCommand: 'npm run start'
-              AppSettings: |
-                PRE_BUILD_COMMAND=#!/bin/sh
-                 rm -rf /home/site/wwwroot/*
 
 
 

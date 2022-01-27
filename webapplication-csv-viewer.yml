@@ -33,18 +33,16 @@ stages:
       
 
     - script: |
-        echo $(System.DefaultWorkingDirectory)
-        ls  
-        npm install
-        npm run build --if-present
-        npm run test --if-present
-      displayName: 'npm install, build and test'
+        # echo $(System.DefaultWorkingDirectory)
+        # ls
+        cd WebApplication &&  npm install
+      displayName: 'npm install'
       
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/WebApplication'
         includeRootFolder: false
         archiveType: zip
         archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip

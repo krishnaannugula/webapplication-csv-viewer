@@ -71,7 +71,7 @@ stages:
               azureSubscription: 'azconnection'
               appType: 'webAppLinux'
               WebAppName: $(WEBAPPNAME)
-              packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip1'
+              packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
               RuntimeStack: 'NODE|14-lts'
               StartupCommand: 'npm run start'
 

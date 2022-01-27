@@ -87,6 +87,7 @@ stages:
               packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
               enableCustomDeployment: true
               DeploymentType: 'webDeploy'
+              RemoveAdditionalFilesFlag: true
 
 
 

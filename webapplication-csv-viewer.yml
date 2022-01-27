@@ -76,12 +76,16 @@ stages:
           #     StartupCommand: 'npm run start'
 
 
-          - task: AzureRmWebAppDeployment@3
+          - task: AzureRmWebAppDeployment@4
             displayName: 'Azure App Service Deploy: webcsvviewerneuprodwa'
             inputs:
+              ConnectionType: 'AzureRM'
               azureSubscription: 'azconnection'
-              appType: 'applinux'
+              appType: 'webAppLinux'
               WebAppName: 'webcsvviewerneuprodwa'
+              packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+              RuntimeStack: 'NODE|14-lts'
+              StartupCommand: 'npm init'
 
 
 

@@ -16,8 +16,8 @@ variables:
 stages:
     ######Build######
 
-- stage: Build
-  displayName: Build stage
+- stage: BuildArtifact
+  displayName: Build Artifact
   jobs:
   - job: Build
     displayName: Build
@@ -51,33 +51,33 @@ stages:
       artifact: drop
 
     
-    #####Release######
+    #####Staging Release######
 
-- stage: Deploy
-  displayName: Deploy stage
-  #dependsOn: Build
-  condition: succeeded()
-  jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    environment: $(ENVIRONMENTSTG)
-    pool:
-      vmImage: $(vmImageName)
-    strategy:
-      runOnce:
-        deploy:
-          steps:
+# - stage: DeployToStage
+#   displayName: Deploy stage
+#   dependsOn: BuildArtifact
+#   condition: succeeded()
+#   jobs:
+#   - deployment: Deploy
+#     displayName: Deploy
+#     environment: $(ENVIRONMENTSTG)
+#     pool:
+#       vmImage: $(vmImageName)
+#     strategy:
+#       runOnce:
+#         deploy:
+#           steps:
           
-          - task: AzureRmWebAppDeployment@4
-            displayName: 'Azure App Service Deploy: $(WEBAPPNAME)'
-            inputs:
-              ConnectionType: 'AzureRM'
-              azureSubscription: '$(AZSUBSCRIPTON)'
-              appType: 'webAppLinux'
-              WebAppName: '$(WEBAPPNAME)'
-              packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
-              RuntimeStack: 'NODE|14-lts'
-              AppSettings: '-AZURE_STORAGE_CONNECTION_STRING $(AZURE_STORAGE_CONNECTION_STRING) -AZURE_STORAGE_CONTAINER $(AZURE_STORAGE_CONTAINER) -CSV_BLOB_FILE $(CSV_BLOB_FILE) -WEBSITE_RUN_FROM_PACKAGE $(WEBSITE_RUN_FROM_PACKAGE) -SCM_DO_BUILD_DURING_DEPLOYMENT $(SCM_DO_BUILD_DURING_DEPLOYMENT)'
+#           - task: AzureRmWebAppDeployment@4
+#             displayName: 'Azure App Service Deploy: $(WEBAPPNAME)'
+#             inputs:
+#               ConnectionType: 'AzureRM'
+#               azureSubscription: '$(AZSUBSCRIPTON)'
+#               appType: 'webAppLinux'
+#               WebAppName: '$(WEBAPPNAME)'
+#               packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+#               RuntimeStack: 'NODE|14-lts'
+#               AppSettings: '-AZURE_STORAGE_CONNECTION_STRING $(AZURE_STORAGE_CONNECTION_STRING) -AZURE_STORAGE_CONTAINER $(AZURE_STORAGE_CONTAINER) -CSV_BLOB_FILE $(CSV_BLOB_FILE) -WEBSITE_RUN_FROM_PACKAGE $(WEBSITE_RUN_FROM_PACKAGE) -SCM_DO_BUILD_DURING_DEPLOYMENT $(SCM_DO_BUILD_DURING_DEPLOYMENT)'
 
 
 
@@ -88,7 +88,7 @@ stages:
 
 # - stage: BuildNotificationsucceeded
 #   displayName: Teams Success Notification
-#   dependsOn: Deploy
+#   dependsOn: DeployToStage
 #   condition: succeeded()
 #   jobs:
 #     - job: Notification
@@ -113,7 +113,7 @@ stages:
 
 # - stage: BuildNotificationFailed
 #   displayName: Teams Failed Notification
-#   dependsOn: Deploy
+#   dependsOn: DeployToStage
 #   condition: Failed()
 #   jobs:
 #     - job: Notification
@@ -138,3 +138,87 @@ stages:
 
 
 
+    #####Production Release######
+
+- stage: DeployToProduction
+  displayName: Deploy Production
+  dependsOn: 
+  - BuildArtifact
+  # - DeployToStage
+  condition: succeeded()
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy Producion
+    environment: $(ENVIRONMENTSTG)
+    pool:
+      vmImage: $(vmImageName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'Azure App Service Deploy: $(WEBAPPNAMEPROD)'
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: '$(AZSUBSCRIPTON)'
+              appType: 'webAppLinux'
+              WebAppName: '$(WEBAPPNAMEPROD)'
+              packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+              RuntimeStack: 'NODE|14-lts'
+              AppSettings: '-AZURE_STORAGE_CONNECTION_STRING $(AZURE_STORAGE_CONNECTION_STRING_PROD) -AZURE_STORAGE_CONTAINER $(AZURE_STORAGE_CONTAINER) -CSV_BLOB_FILE $(CSV_BLOB_FILE) -WEBSITE_RUN_FROM_PACKAGE $(WEBSITE_RUN_FROM_PACKAGE) -SCM_DO_BUILD_DURING_DEPLOYMENT $(SCM_DO_BUILD_DURING_DEPLOYMENT)'
+
+
+
+
+
+
+# #     ###### Teams Success Notification######
+
+# - stage: BuildNotificationsucceeded
+#   displayName: Teams Success Notification
+#   dependsOn: DeployToProduction
+#   condition: succeeded()
+#   jobs:
+#     - job: Notification
+#       steps:
+#       - checkout: none
+#       - task: PowerShell@2
+#         inputs:
+#           targetType: 'inline'
+#           script: |
+#             # Write your PowerShell commands here.
+            
+           
+#             $messageCardBody=@"
+#             { "@type": "MessageCard", "@context": "https://schema.org/extensions", "summary": "1 new build message", "themeColor": "0078D7", "sections": [ { "activityImage": "https://cdn2.iconfinder.com/data/icons/weby-flat-vol-1/512/1_Approved-check-checkbox-confirm-green-success-tick-512.png", "activityTitle": "Notification", "activitySubtitle": "Build and Release", "facts": [ { "name": "EnvName:", "value": "Prodcution" }, { "name": "ApplicationName:", "value": "${env:WEBAPPNAME}" },{ "name": "BuildNumber:", "value": "$(Build.BuildNumber)" },{ "name": "BuildStatus:", "value": "$(Agent.JobStatus)" } ], "text": "Deployment to Prodcution", "potentialAction": [  ] } ] }
+#             "@
+#             echo ${messageCardBody}
+#             echo ${env:WEBAPPNAME}
+
+#             Invoke-RestMethod -uri ${env:WEBHOOKURL} -Method Post -body $messageCardBody -ContentType ‘application/json’
+
+# #     ###### Teams Failed Notification######
+
+# - stage: BuildNotificationFailed
+#   displayName: Teams Failed Notification
+#   dependsOn: DeployToProduction
+#   condition: Failed()
+#   jobs:
+#     - job: Notification
+#       steps:
+#       - checkout: none
+#       - task: PowerShell@2
+#         inputs:
+#           targetType: 'inline'
+#           script: |
+#             # Write your PowerShell commands here.
+            
+           
+#             $messageCardBody=@"
+#             { "@type": "MessageCard", "@context": "https://schema.org/extensions", "summary": "1 new build message", "themeColor": "0078D7", "sections": [ { "activityImage": "https://icon-library.com/images/failed-icon/failed-icon-7.jpg", "activityTitle": "Notification", "activitySubtitle": "Build and Release", "facts": [ { "name": "EnvName:", "value": "Prodcution" }, { "name": "ApplicationName:", "value": "${env:WEBAPPNAME}" },{ "name": "BuildNumber:", "value": "$(Build.BuildNumber)" },{ "name": "BuildStatus:", "value": "Failed" } ], "text": "Deployment to Prodcution", "potentialAction": [  ] } ] }
+#             "@
+#             echo ${messageCardBody}
+#             echo ${env:WEBAPPNAME}
+
+#             Invoke-RestMethod -uri ${env:WEBHOOKURL} -Method Post -body $messageCardBody -ContentType ‘application/json’

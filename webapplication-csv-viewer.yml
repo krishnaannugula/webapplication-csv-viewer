@@ -34,10 +34,7 @@ stages:
       
 
     - script: |
-        cd WebApplication
-        echo $(System.DefaultWorkingDirectory)
-        echo ls
-        npm install
+        cd WebApplication && npm install
       displayName: 'npm install'
       
 
@@ -53,11 +50,7 @@ stages:
     - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       artifact: drop
 
-    # - task: PublishBuildArtifacts@1
-    #   inputs:
-    #     PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    #     ArtifactName: 'drop'
-    #     publishLocation: 'Container'
+    
     #####Release######
 
 - stage: Deploy
@@ -67,35 +60,24 @@ stages:
   jobs:
   - deployment: Deploy
     displayName: Deploy
-    environment: Staging
+    environment: $(ENVIRONMENTSTG)
     pool:
       vmImage: $(vmImageName)
     strategy:
       runOnce:
         deploy:
           steps:
-          # - task: AzureRmWebAppDeployment@4
-          #   displayName: 'Azure App Service Deploy: $(WEBAPPNAME)'
-          #   inputs:
-          #     ConnectionType: 'AzureRM'
-          #     azureSubscription: 'azconnection'
-          #     appType: 'webAppLinux'
-          #     WebAppName: $(WEBAPPNAME)
-          #     packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
-          #     RuntimeStack: 'NODE|14-lts'
-          #     StartupCommand: 'npm run start'
-
-
+          
           - task: AzureRmWebAppDeployment@4
-            displayName: 'Azure App Service Deploy: webcsvviewerneustgwa'
+            displayName: 'Azure App Service Deploy: $(WEBAPPNAME)'
             inputs:
               ConnectionType: 'AzureRM'
-              azureSubscription: 'azconnection'
+              azureSubscription: '$(AZSUBSCRIPTON)'
               appType: 'webAppLinux'
-              WebAppName: 'webcsvviewerneustgwa'
+              WebAppName: '$(WEBAPPNAME)'
               packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
               RuntimeStack: 'NODE|14-lts'
-              AppSettings: '-AZURE_STORAGE_CONNECTION_STRING DefaultEndpointsProtocol=https;AccountName=webcsvviewerneustgsa;AccountKey=Jfx+GDsZcdmFdOjOtwUswM+Cme8aA0vFJ4hHiIx3GL4aMjTKvgR9tD2DYXEA0+akUllpLeokk8F+o/1Reh7f8A==;EndpointSuffix=core.windows.net -AZURE_STORAGE_CONTAINER input -CSV_BLOB_FILE us-500.csv -WEBSITE_RUN_FROM_PACKAGE 1 -SCM_DO_BUILD_DURING_DEPLOYMENT true'
+              AppSettings: '-AZURE_STORAGE_CONNECTION_STRING $(AZURE_STORAGE_CONNECTION_STRING) -AZURE_STORAGE_CONTAINER $(AZURE_STORAGE_CONTAINER) -CSV_BLOB_FILE $(CSV_BLOB_FILE) -WEBSITE_RUN_FROM_PACKAGE $(WEBSITE_RUN_FROM_PACKAGE) -SCM_DO_BUILD_DURING_DEPLOYMENT $(SCM_DO_BUILD_DURING_DEPLOYMENT)'
 
 
 
@@ -120,7 +102,7 @@ stages:
             
            
 #             $messageCardBody=@"
-#             { "@type": "MessageCard", "@context": "https://schema.org/extensions", "summary": "1 new build message", "themeColor": "0078D7", "sections": [ { "activityImage": "https://cdn2.iconfinder.com/data/icons/weby-flat-vol-1/512/1_Approved-check-checkbox-confirm-green-success-tick-512.png", "activityTitle": "Notification", "activitySubtitle": "Build and Release", "facts": [ { "name": "EnvName:", "value": "${env:ENVIRONMENTNAME}" }, { "name": "ApplicationName:", "value": "${env:WEBAPPNAME}" },{ "name": "BuildNumber:", "value": "$(Build.BuildNumber)" },{ "name": "BuildStatus:", "value": "$(Agent.JobStatus)" } ], "text": "Deployment to ${env:ENVIRONMENTNAME}", "potentialAction": [  ] } ] }
+#             { "@type": "MessageCard", "@context": "https://schema.org/extensions", "summary": "1 new build message", "themeColor": "0078D7", "sections": [ { "activityImage": "https://cdn2.iconfinder.com/data/icons/weby-flat-vol-1/512/1_Approved-check-checkbox-confirm-green-success-tick-512.png", "activityTitle": "Notification", "activitySubtitle": "Build and Release", "facts": [ { "name": "EnvName:", "value": "${env:ENVIRONMENTSTG}" }, { "name": "ApplicationName:", "value": "${env:WEBAPPNAME}" },{ "name": "BuildNumber:", "value": "$(Build.BuildNumber)" },{ "name": "BuildStatus:", "value": "$(Agent.JobStatus)" } ], "text": "Deployment to ${env:ENVIRONMENTSTG}", "potentialAction": [  ] } ] }
 #             "@
 #             echo ${messageCardBody}
 #             echo ${env:WEBAPPNAME}
@@ -145,7 +127,7 @@ stages:
             
            
 #             $messageCardBody=@"
-#             { "@type": "MessageCard", "@context": "https://schema.org/extensions", "summary": "1 new build message", "themeColor": "0078D7", "sections": [ { "activityImage": "https://icon-library.com/images/failed-icon/failed-icon-7.jpg", "activityTitle": "Notification", "activitySubtitle": "Build and Release", "facts": [ { "name": "EnvName:", "value": "${env:ENVIRONMENTNAME}" }, { "name": "ApplicationName:", "value": "${env:WEBAPPNAME}" },{ "name": "BuildNumber:", "value": "$(Build.BuildNumber)" },{ "name": "BuildStatus:", "value": "Failed" } ], "text": "Deployment to ${env:ENVIRONMENTNAME}", "potentialAction": [  ] } ] }
+#             { "@type": "MessageCard", "@context": "https://schema.org/extensions", "summary": "1 new build message", "themeColor": "0078D7", "sections": [ { "activityImage": "https://icon-library.com/images/failed-icon/failed-icon-7.jpg", "activityTitle": "Notification", "activitySubtitle": "Build and Release", "facts": [ { "name": "EnvName:", "value": "${env:ENVIRONMENTSTG}" }, { "name": "ApplicationName:", "value": "${env:WEBAPPNAME}" },{ "name": "BuildNumber:", "value": "$(Build.BuildNumber)" },{ "name": "BuildStatus:", "value": "Failed" } ], "text": "Deployment to ${env:ENVIRONMENTSTG}", "potentialAction": [  ] } ] }
 #             "@
 #             echo ${messageCardBody}
 #             echo ${env:WEBAPPNAME}

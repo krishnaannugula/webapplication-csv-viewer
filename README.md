@@ -55,12 +55,14 @@ The deployment notifications are sent to InlineMarket's Teams channel `Playgroun
 1. Upon successful deployments, the web applications are accessible using the following links.
     * Staging - [webcsvviewerneustgwa](https://webcsvviewerneustgwa.azurewebsites.net/)
     * Production - [webcsvviewerneuprodwa](https://webcsvviewerneuprodwa.azurewebsites.net/)
+	
+
+1. Watch for the deployment notifications in Microsoft Teams `Playground` channel.
 
 ##### Below is the sample image	
 
 ![image info](./Resources/Images/WebContent.JPG)
 
-1. Watch for the deployment notifications in Microsoft Teams `Playground` channel.
 
 
 ### Teams Notification

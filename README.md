@@ -9,7 +9,7 @@ The **Web CSV Viewer** is a simple online web application which displays the con
 # Architecture
 The web application is built using [Node.js](https://nodejs.org/en/) and [Express](https://expressjs.com/) framework.
 
-The web application is hosted on [Azure App Service](./WebApplication). The source CSV file is located in [Azure blob Storage](./Resources/Data).
+The web application is hosted on [Azure App Service](https://portal.azure.com/#@inlinemarket.fi/resource/subscriptions/2a3e926c-d151-4e4b-8d5d-1479bbfbe014/resourceGroups/inline-exercise-rg/providers/Microsoft.Web/sites/webcsvviewerneustgwa/appServices). The source CSV file is located in [Azure blob Storage](https://portal.azure.com/#blade/Microsoft_Azure_Storage/ContainerMenuBlade/overview/storageAccountId/%2Fsubscriptions%2F2a3e926c-d151-4e4b-8d5d-1479bbfbe014%2FresourceGroups%2Finline-exercise-rg%2Fproviders%2FMicrosoft.Storage%2FstorageAccounts%2Fwebcsvviewerneustgsa/path/input/etag/%220x8D9E1B5B8749EB8%22/defaultEncryptionScope/%24account-encryption-key/denyEncryptionScopeOverride//defaultId//publicAccessVal/None).
 
 Continuous Integration and Deployments are enabled using [Azure DevOps CI/CD pipelines](https://azure.microsoft.com/en-us/services/devops/pipelines/). 
 

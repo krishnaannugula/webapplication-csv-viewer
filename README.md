@@ -56,7 +56,7 @@ The deployment notifications are sent to InlineMarket's Teams channel `Playgroun
     * Staging - [webcsvviewerneustgwa](https://webcsvviewerneustgwa.azurewebsites.net/)
     * Production - [webcsvviewerneuprodwa](https://webcsvviewerneuprodwa.azurewebsites.net/)
 
-##### Below is the same image	
+##### Below is the sample image	
 
 ![image info](./Resources/Images/WebContent.JPG)
 
@@ -66,9 +66,9 @@ The deployment notifications are sent to InlineMarket's Teams channel `Playgroun
 ### Teams Notification
 1. Regardless of build status, once deployment is complete, Azure pipeline will send notifications to the release team via the Microsoft teams channel.
 
-##### Below is the same image
+##### Below is the sample image
 
-![image info](./Resources/Images/TeamsNotification.jfif)
+![image info](./Resources/Images/TeamsNotification.png)
 
 
 

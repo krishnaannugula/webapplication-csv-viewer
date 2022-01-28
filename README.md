@@ -17,7 +17,7 @@ The deployment notifications are sent to InlineMarket's Teams channel `Playgroun
 
 ## Detailed design
 
-![image info](https://github.com/krishnaannugula/webapplication-csv-viewer/Resources/Images/Architecture.png)
+![image info](./Resources/Images/Architecture.png)
 
 
 ## Environment setup

@@ -1,3 +1,11 @@
+- [Overview](#overview)
+  * [Folders](#folders)
+- [Architecture](#architecture)
+  * [Detailed design](#detailed-design)
+- [Environment setup](#environment-setup)
+  * [Local environment](#local-environment)
+    + [Installation Prerequisites](#installation-prerequisites)
+  * [Deploying to Azure](#deploying-to-azure)			   
 # Overview
 
 The **Web CSV Viewer** is a simple online web application which displays the contents of CSV file located in Azure Cloud. 

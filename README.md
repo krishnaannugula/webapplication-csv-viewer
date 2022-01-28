@@ -48,7 +48,7 @@ The deployment notifications are sent to InlineMarket's Teams channel `Playgroun
         ```
     * Your web application should now be running locally on [localhost:3000](http://localhost:3000/).
 
-## Deploying to Azure
+### Deploying to Azure
 
 1. As soon as the code changes are pushed to [master](https://github.com/krishnaannugula/webapplication-csv-viewer) branch, the Azure DevOps CI/CD pipeline [webapplication-csv-viewer](https://dev.azure.com/inlinemarket/Playground/_build?definitionId=30) is automatically triggered which compiles the code, generates the artifact, and publishes the artifact to Azure staging and production environments.
 

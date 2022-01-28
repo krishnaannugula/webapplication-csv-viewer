@@ -158,12 +158,12 @@ stages:
           steps:
           
           - task: AzureRmWebAppDeployment@4
-            displayName: 'Azure App Service Deploy: $(WEBAPPNAME)'
+            displayName: 'Azure App Service Deploy: $(WEBAPPNAMEPROD)'
             inputs:
               ConnectionType: 'AzureRM'
               azureSubscription: '$(AZSUBSCRIPTON)'
               appType: 'webAppLinux'
-              WebAppName: '$(WEBAPPNAME)'
+              WebAppName: '$(WEBAPPNAMEPROD)'
               packageForLinux: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
               RuntimeStack: 'NODE|14-lts'
               AppSettings: '-AZURE_STORAGE_CONNECTION_STRING $(AZURE_STORAGE_CONNECTION_STRING_PROD) -AZURE_STORAGE_CONTAINER $(AZURE_STORAGE_CONTAINER) -CSV_BLOB_FILE $(CSV_BLOB_FILE) -WEBSITE_RUN_FROM_PACKAGE $(WEBSITE_RUN_FROM_PACKAGE) -SCM_DO_BUILD_DURING_DEPLOYMENT $(SCM_DO_BUILD_DURING_DEPLOYMENT)'
@@ -216,7 +216,7 @@ stages:
             
            
             $messageCardBody=@"
-            { "@type": "MessageCard", "@context": "https://schema.org/extensions", "summary": "1 new build message", "themeColor": "0078D7", "sections": [ { "activityImage": "https://icon-library.com/images/failed-icon/failed-icon-7.jpg", "activityTitle": "Notification", "activitySubtitle": "Build and Release", "facts": [ { "name": "EnvName:", "value": "Prodcution" }, { "name": "ApplicationName:", "value": "${env:WEBAPPNAME}" },{ "name": "BuildNumber:", "value": "$(Build.BuildNumber)" },{ "name": "BuildStatus:", "value": "Failed" } ], "text": "Deployment to Prodcution", "potentialAction": [  ] } ] }
+            { "@type": "MessageCard", "@context": "https://schema.org/extensions", "summary": "1 new build message", "themeColor": "0078D7", "sections": [ { "activityImage": "https://icon-library.com/images/failed-icon/failed-icon-7.jpg", "activityTitle": "Notification", "activitySubtitle": "Build and Release", "facts": [ { "name": "EnvName:", "value": "Prodcution" }, { "name": "ApplicationName:", "value": "${env:WEBAPPNAMEPROD}" },{ "name": "BuildNumber:", "value": "$(Build.BuildNumber)" },{ "name": "BuildStatus:", "value": "Failed" } ], "text": "Deployment to Prodcution", "potentialAction": [  ] } ] }
             "@
             echo ${messageCardBody}
             echo ${env:WEBAPPNAME}
